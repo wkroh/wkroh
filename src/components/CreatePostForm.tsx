@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import MarkdownToolbar from "@/components/MarkdownToolbar";
 
 interface CreatePostFormProps {
   categories: Array<{ id: string; name: string; emoji: string }>;
@@ -13,6 +14,7 @@ const CreatePostForm = ({ categories, onSubmit, submitting }: CreatePostFormProp
   const [hashtagInput, setHashtagInput] = useState("");
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const addHashtag = () => {
     const tag = hashtagInput.trim().replace(/^#/, "");
@@ -77,12 +79,16 @@ const CreatePostForm = ({ categories, onSubmit, submitting }: CreatePostFormProp
         autoFocus
       />
 
+      {/* Markdown Toolbar */}
+      <MarkdownToolbar textareaRef={textareaRef} value={content} onChange={setContent} />
+
       <textarea
+        ref={textareaRef}
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="اكتب محتوى المنشور... (يدعم Markdown: **غامق**, *مائل*, # عناوين, - قوائم, > اقتباس, `كود`)"
+        placeholder="اكتب محتوى المنشور... (يدعم Markdown)"
         rows={6}
-        className="w-full bg-transparent placeholder:text-muted-foreground/50 outline-none resize-none leading-relaxed font-mono text-sm"
+        className="w-full bg-transparent placeholder:text-muted-foreground/50 outline-none resize-none leading-relaxed text-sm"
       />
 
       {/* Hashtags */}

@@ -11,6 +11,7 @@ import {
 import CreatePostForm from "@/components/CreatePostForm";
 import PostCard from "@/components/PostCard";
 import CategoryManager from "@/components/CategoryManager";
+import logo from "@/assets/logo.jpg";
 
 const Index = () => {
   const { isOwner, loading: ipLoading } = useIpCheck();
@@ -60,7 +61,7 @@ const Index = () => {
   };
 
   const handleHashtagClick = (tag: string) => {
-    setSearch(`#${tag}`);
+    setSearch(tag);
   };
 
   return (
@@ -69,18 +70,16 @@ const Index = () => {
       <header className="border-b border-border bg-card/60 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
-            <div>
-              <h1 className="text-xl font-bold tracking-tight">منتدى كورا</h1>
-              <p className="text-xs text-muted-foreground">محمد · wkroh</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <a href="mailto:wkroh@proton.me" className="text-xs text-muted-foreground hover:text-primary transition-colors">
-                wkroh@proton.me
-              </a>
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
-                م
+            <div className="flex items-center gap-3">
+              <img src={logo} alt="كورا" className="w-10 h-10 rounded-full object-cover border border-border" />
+              <div>
+                <h1 className="text-xl font-extrabold tracking-tight">منتدى كورا</h1>
+                <p className="text-xs text-muted-foreground">محمد · wkroh</p>
               </div>
             </div>
+            <a href="mailto:wkroh@proton.me" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+              wkroh@proton.me
+            </a>
           </div>
 
           {/* Search */}
