@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
-const FUNCTION_URL = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/forum-api`;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
+const FUNCTION_URL = `${SUPABASE_URL}/functions/v1/forum-api`;
 
 async function callApi(method: string, body?: Record<string, unknown>, params?: Record<string, string>) {
   const url = new URL(FUNCTION_URL);
