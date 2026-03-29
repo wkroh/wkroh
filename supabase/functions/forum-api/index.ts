@@ -17,6 +17,13 @@ function getClientIp(req: Request): string {
   );
 }
 
+function json(data: unknown, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -24,7 +31,6 @@ Deno.serve(async (req) => {
 
   const clientIp = getClientIp(req);
   const url = new URL(req.url);
-  const path = url.pathname.split("/").pop() || "";
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -32,70 +38,95 @@ Deno.serve(async (req) => {
   );
 
   try {
-    // GET: check-ip — returns whether the caller is the owner
-    if (req.method === "GET" && path === "forum-api") {
+    // GET actions
+    if (req.method === "GET") {
       const action = url.searchParams.get("action");
 
       if (action === "check-ip") {
-        return new Response(
-          JSON.stringify({ isOwner: clientIp === ALLOWED_IP, ip: clientIp }),
-          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+        return json({ isOwner: clientIp === ALLOWED_IP, ip: clientIp });
       }
 
-      return new Response(JSON.stringify({ error: "Unknown action" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return json({ error: "Unknown action" }, 400);
     }
 
-    // POST: owner-only write operations
+    // POST actions
     if (req.method === "POST") {
-      if (clientIp !== ALLOWED_IP) {
-        return new Response(
-          JSON.stringify({ error: "غير مصرح لك بهذا الإجراء" }),
-          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
       const body = await req.json();
       const { action } = body;
+
+      // Public action: add comment (anyone can comment)
+      if (action === "add-comment") {
+        const { post_id, author_name, content } = body;
+        if (!post_id || !author_name?.trim() || !content?.trim()) {
+          return json({ error: "جميع الحقول مطلوبة" }, 400);
+        }
+        const { data, error } = await supabase
+          .from("comments")
+          .insert({ post_id, author_name: author_name.trim(), content: content.trim() })
+          .select()
+          .single();
+        if (error) throw error;
+        return json(data);
+      }
+
+      // Owner-only actions below
+      if (clientIp !== ALLOWED_IP) {
+        return json({ error: "غير مصرح لك بهذا الإجراء" }, 403);
+      }
 
       if (action === "create-post") {
         const { title, content, category_id, hashtags } = body;
         if (!title || !content) {
-          return new Response(
-            JSON.stringify({ error: "العنوان والمحتوى مطلوبان" }),
-            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
+          return json({ error: "العنوان والمحتوى مطلوبان" }, 400);
         }
         const { data, error } = await supabase
           .from("posts")
-          .insert({ title, content, category_id: category_id || null, hashtags: hashtags || [] })
+          .insert({
+            title,
+            content,
+            category_id: category_id || null,
+            hashtags: hashtags || [],
+            author_username: "كورا",
+          })
           .select()
           .single();
         if (error) throw error;
-        return new Response(JSON.stringify(data), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return json(data);
+      }
+
+      if (action === "edit-post") {
+        const { id, title, content, category_id, hashtags } = body;
+        if (!id || !title || !content) {
+          return json({ error: "العنوان والمحتوى مطلوبان" }, 400);
+        }
+        const { data, error } = await supabase
+          .from("posts")
+          .update({ title, content, category_id: category_id || null, hashtags: hashtags || [] })
+          .eq("id", id)
+          .select()
+          .single();
+        if (error) throw error;
+        return json(data);
       }
 
       if (action === "delete-post") {
         const { id } = body;
         const { error } = await supabase.from("posts").delete().eq("id", id);
         if (error) throw error;
-        return new Response(JSON.stringify({ success: true }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return json({ success: true });
+      }
+
+      if (action === "delete-comment") {
+        const { id } = body;
+        const { error } = await supabase.from("comments").delete().eq("id", id);
+        if (error) throw error;
+        return json({ success: true });
       }
 
       if (action === "create-category") {
         const { name, emoji } = body;
         if (!name) {
-          return new Response(
-            JSON.stringify({ error: "اسم القسم مطلوب" }),
-            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
+          return json({ error: "اسم القسم مطلوب" }, 400);
         }
         const { data, error } = await supabase
           .from("categories")
@@ -103,34 +134,42 @@ Deno.serve(async (req) => {
           .select()
           .single();
         if (error) throw error;
-        return new Response(JSON.stringify(data), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return json(data);
       }
 
       if (action === "delete-category") {
         const { id } = body;
         const { error } = await supabase.from("categories").delete().eq("id", id);
         if (error) throw error;
-        return new Response(JSON.stringify({ success: true }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return json({ success: true });
       }
 
-      return new Response(JSON.stringify({ error: "Unknown action" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      if (action === "upload-image") {
+        const { base64, filename, content_type } = body;
+        if (!base64 || !filename) {
+          return json({ error: "الملف مطلوب" }, 400);
+        }
+
+        const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+        const path = `${Date.now()}-${filename}`;
+
+        const { error } = await supabase.storage
+          .from("post-images")
+          .upload(path, bytes, { contentType: content_type || "image/jpeg" });
+        if (error) throw error;
+
+        const { data: urlData } = supabase.storage
+          .from("post-images")
+          .getPublicUrl(path);
+
+        return json({ url: urlData.publicUrl });
+      }
+
+      return json({ error: "Unknown action" }, 400);
     }
 
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
-      status: 405,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return json({ error: "Method not allowed" }, 405);
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: err.message || "خطأ في الخادم" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return json({ error: err.message || "خطأ في الخادم" }, 500);
   }
 });

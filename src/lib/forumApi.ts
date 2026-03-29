@@ -49,12 +49,54 @@ export async function fetchPosts(categoryId?: string, search?: string) {
   return data;
 }
 
+export async function fetchPost(id: string) {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*, categories(name, emoji)")
+    .eq("id", id)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function fetchPostsByUser(username: string) {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*, categories(name, emoji)")
+    .eq("author_username", username)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data;
+}
+
+export async function fetchComments(postId: string) {
+  const { data, error } = await supabase
+    .from("comments")
+    .select("*")
+    .eq("post_id", postId)
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
 export async function createPost(title: string, content: string, categoryId: string | null, hashtags: string[]) {
   return callApi("POST", { action: "create-post", title, content, category_id: categoryId, hashtags });
 }
 
+export async function editPost(id: string, title: string, content: string, categoryId: string | null, hashtags: string[]) {
+  return callApi("POST", { action: "edit-post", id, title, content, category_id: categoryId, hashtags });
+}
+
 export async function deletePost(id: string) {
   return callApi("POST", { action: "delete-post", id });
+}
+
+export async function addComment(postId: string, authorName: string, content: string) {
+  return callApi("POST", { action: "add-comment", post_id: postId, author_name: authorName, content });
+}
+
+export async function deleteComment(id: string) {
+  return callApi("POST", { action: "delete-comment", id });
 }
 
 export async function createCategory(name: string, emoji: string) {
@@ -63,4 +105,23 @@ export async function createCategory(name: string, emoji: string) {
 
 export async function deleteCategory(id: string) {
   return callApi("POST", { action: "delete-category", id });
+}
+
+export async function uploadImage(file: File): Promise<string> {
+  const base64 = await new Promise<string>((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result.split(",")[1]);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const data = await callApi("POST", {
+    action: "upload-image",
+    base64,
+    filename: file.name,
+    content_type: file.type,
+  });
+  return data.url;
 }

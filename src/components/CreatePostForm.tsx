@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import MarkdownToolbar from "@/components/MarkdownToolbar";
+import { uploadImage } from "@/lib/forumApi";
 
 interface CreatePostFormProps {
   categories: Array<{ id: string; name: string; emoji: string }>;
@@ -14,7 +15,9 @@ const CreatePostForm = ({ categories, onSubmit, submitting }: CreatePostFormProp
   const [hashtagInput, setHashtagInput] = useState("");
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const addHashtag = () => {
     const tag = hashtagInput.trim().replace(/^#/, "");
@@ -26,6 +29,27 @@ const CreatePostForm = ({ categories, onSubmit, submitting }: CreatePostFormProp
 
   const removeHashtag = (tag: string) => {
     setHashtags((prev) => prev.filter((t) => t !== tag));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const url = await uploadImage(file);
+      const textarea = textareaRef.current;
+      if (textarea) {
+        const pos = textarea.selectionStart;
+        const imgMarkdown = `\n![${file.name}](${url})\n`;
+        setContent((prev) => prev.substring(0, pos) + imgMarkdown + prev.substring(pos));
+      } else {
+        setContent((prev) => prev + `\n![${file.name}](${url})\n`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -82,14 +106,25 @@ const CreatePostForm = ({ categories, onSubmit, submitting }: CreatePostFormProp
       {/* Markdown Toolbar */}
       <MarkdownToolbar textareaRef={textareaRef} value={content} onChange={setContent} />
 
-      <textarea
-        ref={textareaRef}
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="اكتب محتوى المنشور... (يدعم Markdown)"
-        rows={6}
-        className="w-full bg-transparent placeholder:text-muted-foreground/50 outline-none resize-none leading-relaxed text-sm"
-      />
+      <div className="relative">
+        <textarea
+          ref={textareaRef}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="اكتب محتوى المنشور... (يدعم Markdown)"
+          rows={6}
+          className="w-full bg-transparent placeholder:text-muted-foreground/50 outline-none resize-none leading-relaxed text-sm"
+        />
+        <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+          className="absolute left-2 bottom-2 px-2 py-1 rounded bg-secondary text-secondary-foreground text-xs hover:bg-secondary/80 disabled:opacity-50"
+        >
+          {uploading ? "⏳" : "📷 صورة"}
+        </button>
+      </div>
 
       {/* Hashtags */}
       <div className="space-y-2">

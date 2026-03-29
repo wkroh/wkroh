@@ -38,8 +38,41 @@ export type Database = {
         }
         Relationships: []
       }
+      comments: {
+        Row: {
+          author_name: string
+          content: string
+          created_at: string
+          id: string
+          post_id: string
+        }
+        Insert: {
+          author_name: string
+          content: string
+          created_at?: string
+          id?: string
+          post_id: string
+        }
+        Update: {
+          author_name?: string
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posts: {
         Row: {
+          author_username: string
           category_id: string | null
           content: string
           created_at: string
@@ -49,6 +82,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          author_username?: string
           category_id?: string | null
           content: string
           created_at?: string
@@ -58,6 +92,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          author_username?: string
           category_id?: string | null
           content?: string
           created_at?: string
