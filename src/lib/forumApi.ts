@@ -59,15 +59,6 @@ export async function fetchPost(id: string) {
   return data;
 }
 
-export async function fetchPostsByUser(username: string) {
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*, categories(name, emoji)")
-    .eq("author_username", username)
-    .order("created_at", { ascending: false });
-  if (error) throw error;
-  return data;
-}
 
 export async function fetchComments(postId: string) {
   const { data, error } = await supabase

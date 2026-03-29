@@ -18,7 +18,6 @@ interface PostCardProps {
     content: string;
     hashtags: string[];
     created_at: string;
-    author_username: string;
     categories: { name: string; emoji: string } | null;
   };
   isOwner: boolean;
@@ -43,9 +42,6 @@ const PostCard = ({ post, isOwner, onDelete, onHashtagClick }: PostCardProps) =>
                 {post.categories.emoji} {post.categories.name}
               </span>
             )}
-            <Link to={`/user/${post.author_username}`} className="text-xs text-primary hover:underline">
-              @{post.author_username}
-            </Link>
             <span className="text-xs text-muted-foreground">
               {timeAgo(post.created_at)}
             </span>
