@@ -1,5 +1,4 @@
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { Link } from "react-router-dom";
 
 function timeAgo(dateStr: string): string {
   const now = new Date();
@@ -19,11 +18,18 @@ interface PostCardProps {
     content: string;
     hashtags: string[];
     created_at: string;
+    author_username: string;
     categories: { name: string; emoji: string } | null;
   };
   isOwner: boolean;
   onDelete: (id: string) => void;
   onHashtagClick: (tag: string) => void;
+}
+
+function getPreview(content: string, maxLen = 120): string {
+  // Strip markdown syntax for preview
+  const plain = content.replace(/[#*`>\[\]!_~()\-]/g, "").replace(/\n+/g, " ");
+  return plain.length > maxLen ? plain.substring(0, maxLen) + "..." : plain;
 }
 
 const PostCard = ({ post, isOwner, onDelete, onHashtagClick }: PostCardProps) => {
@@ -37,25 +43,30 @@ const PostCard = ({ post, isOwner, onDelete, onHashtagClick }: PostCardProps) =>
                 {post.categories.emoji} {post.categories.name}
               </span>
             )}
+            <Link to={`/user/${post.author_username}`} className="text-xs text-primary hover:underline">
+              @{post.author_username}
+            </Link>
             <span className="text-xs text-muted-foreground">
               {timeAgo(post.created_at)}
             </span>
           </div>
 
-          <h2 className="text-lg font-semibold mb-3 leading-snug">{post.title}</h2>
+          <Link to={`/post/${post.id}`}>
+            <h2 className="text-lg font-semibold mb-1.5 leading-snug hover:text-primary transition-colors">{post.title}</h2>
+          </Link>
 
-          {/* Markdown content */}
-          <div className="prose-forum text-foreground/85 leading-relaxed">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
-          </div>
+          <p className="text-sm text-muted-foreground mb-2">{getPreview(post.content)}</p>
 
-          {/* Hashtags */}
+          <Link to={`/post/${post.id}`} className="text-xs text-primary hover:underline">
+            عرض المزيد ←
+          </Link>
+
           {post.hashtags && post.hashtags.length > 0 && (
-            <div className="flex gap-1.5 flex-wrap mt-3">
+            <div className="flex gap-1.5 flex-wrap mt-2">
               {post.hashtags.map((tag) => (
                 <button
                   key={tag}
-                  onClick={() => onHashtagClick(tag)}
+                  onClick={(e) => { e.preventDefault(); onHashtagClick(tag); }}
                   className="px-2 py-0.5 rounded-full text-xs bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
                 >
                   #{tag}
