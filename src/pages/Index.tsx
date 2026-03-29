@@ -6,8 +6,8 @@ import {
   createPost,
   deletePost,
   createCategory,
-  deleteCategory,
-} from "@/lib/forumApi";
+  deleteCategory } from
+"@/lib/forumApi";
 import CreatePostForm from "@/components/CreatePostForm";
 import PostCard from "@/components/PostCard";
 import CategoryManager from "@/components/CategoryManager";
@@ -15,7 +15,7 @@ import logo from "@/assets/logo.jpg";
 
 const Index = () => {
   const { isOwner, loading: ipLoading } = useIpCheck();
-  const [categories, setCategories] = useState<Array<{ id: string; name: string; emoji: string; sort_order: number; created_at: string }>>([]);
+  const [categories, setCategories] = useState<Array<{id: string;name: string;emoji: string;sort_order: number;created_at: string;}>>([]);
   const [posts, setPosts] = useState<any[]>([]);
   const [filter, setFilter] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -23,9 +23,9 @@ const Index = () => {
 
   const loadData = useCallback(async () => {
     const [cats, p] = await Promise.all([
-      fetchCategories(),
-      fetchPosts(filter || undefined, search || undefined),
-    ]);
+    fetchCategories(),
+    fetchPosts(filter || undefined, search || undefined)]
+    );
     setCategories(cats || []);
     setPosts(p || []);
   }, [filter, search]);
@@ -71,7 +71,7 @@ const Index = () => {
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
-              <img src={logo} alt="كورا" className="w-10 h-10 rounded-full object-cover border border-border" />
+              <img alt="كورا" className="w-10 h-10 rounded-full object-cover border border-border" src="/lovable-uploads/41c7b859-8b99-4066-9b64-7762e8ed9448.jpg" />
               <div>
                 <h1 className="text-xl font-extrabold tracking-tight">منتدى كورا</h1>
                 <p className="text-xs text-muted-foreground">محمد · wkroh</p>
@@ -89,16 +89,16 @@ const Index = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="🔍 ابحث في المنشورات..."
-              className="w-full bg-secondary/50 rounded-lg px-4 py-2 text-sm outline-none placeholder:text-muted-foreground/50 focus:ring-1 focus:ring-primary/30 transition-all"
-            />
-            {search && (
-              <button
-                onClick={() => setSearch("")}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs"
-              >
+              className="w-full bg-secondary/50 rounded-lg px-4 py-2 text-sm outline-none placeholder:text-muted-foreground/50 focus:ring-1 focus:ring-primary/30 transition-all" />
+            
+            {search &&
+            <button
+              onClick={() => setSearch("")}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs">
+              
                 ✕
               </button>
-            )}
+            }
           </div>
         </div>
       </header>
@@ -106,69 +106,69 @@ const Index = () => {
       {/* Main */}
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-5">
         {/* Owner: Category Manager */}
-        {!ipLoading && isOwner && (
-          <CategoryManager
-            categories={categories}
-            onAdd={handleCreateCategory}
-            onDelete={handleDeleteCategory}
-          />
-        )}
+        {!ipLoading && isOwner &&
+        <CategoryManager
+          categories={categories}
+          onAdd={handleCreateCategory}
+          onDelete={handleDeleteCategory} />
+
+        }
 
         {/* Owner: Create post */}
-        {!ipLoading && isOwner && (
-          <CreatePostForm
-            categories={categories}
-            onSubmit={handleCreatePost}
-            submitting={submitting}
-          />
-        )}
+        {!ipLoading && isOwner &&
+        <CreatePostForm
+          categories={categories}
+          onSubmit={handleCreatePost}
+          submitting={submitting} />
+
+        }
 
         {/* Category filter */}
         <div className="flex gap-1.5 overflow-x-auto pb-1">
           <button
             onClick={() => setFilter(null)}
             className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-              !filter
-                ? "bg-foreground text-background"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/70"
-            }`}
-          >
+            !filter ?
+            "bg-foreground text-background" :
+            "bg-secondary text-secondary-foreground hover:bg-secondary/70"}`
+            }>
+            
             الكل
           </button>
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setFilter(cat.id)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                filter === cat.id
-                  ? "bg-foreground text-background"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/70"
-              }`}
-            >
+          {categories.map((cat) =>
+          <button
+            key={cat.id}
+            onClick={() => setFilter(cat.id)}
+            className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+            filter === cat.id ?
+            "bg-foreground text-background" :
+            "bg-secondary text-secondary-foreground hover:bg-secondary/70"}`
+            }>
+            
               {cat.emoji} {cat.name}
             </button>
-          ))}
+          )}
         </div>
 
         {/* Posts */}
-        {posts.length === 0 ? (
-          <div className="text-center py-16 text-muted-foreground">
+        {posts.length === 0 ?
+        <div className="text-center py-16 text-muted-foreground">
             <p className="text-4xl mb-3">🍃</p>
             <p className="text-sm">لا توجد منشورات بعد</p>
+          </div> :
+
+        <div className="space-y-3">
+            {posts.map((post) =>
+          <PostCard
+            key={post.id}
+            post={post}
+            isOwner={isOwner}
+            onDelete={handleDeletePost}
+            onHashtagClick={handleHashtagClick} />
+
+          )}
           </div>
-        ) : (
-          <div className="space-y-3">
-            {posts.map((post) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                isOwner={isOwner}
-                onDelete={handleDeletePost}
-                onHashtagClick={handleHashtagClick}
-              />
-            ))}
-          </div>
-        )}
+        }
       </main>
 
       {/* Footer */}
@@ -177,8 +177,8 @@ const Index = () => {
           منتدى كورا · محمد · {new Date().getFullYear()}
         </div>
       </footer>
-    </div>
-  );
+    </div>);
+
 };
 
 export default Index;
