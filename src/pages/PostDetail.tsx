@@ -234,10 +234,6 @@ const PostDetail = () => {
                 </span>
               )}
               <span className="text-xs text-muted-foreground">{timeAgo(post.created_at)}</span>
-              <span className="text-xs text-muted-foreground">·</span>
-              <Link to={`/user/${post.author_username}`} className="text-xs text-primary hover:underline">
-                @{post.author_username}
-              </Link>
             </div>
 
             <h1 className="text-2xl font-extrabold mb-4 leading-snug">{post.title}</h1>
