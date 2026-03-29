@@ -18,7 +18,6 @@ interface PostCardProps {
     content: string;
     hashtags: string[];
     created_at: string;
-    author_username: string;
     categories: { name: string; emoji: string } | null;
   };
   isOwner: boolean;
