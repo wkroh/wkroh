@@ -184,7 +184,7 @@ const ChapterReader = () => {
                   {Object.entries(BACKGROUNDS).map(([key, val]) => (
                     <button key={key} onClick={() => updateSetting("background", key)}
                       className={`w-10 h-10 rounded-full border-2 transition-all ${settings.background === key ? "scale-110 ring-2 ring-offset-2" : "opacity-70 hover:opacity-100"}`}
-                      style={{ background: val.bg, borderColor: val.text + "30", ringColor: val.text }}
+                      style={{ background: val.bg, borderColor: val.text + "30" }}
                       title={val.label} />
                   ))}
                 </div>

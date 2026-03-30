@@ -138,7 +138,7 @@ const Books = () => {
     if (!file) return;
     setUploading(true);
     try {
-      const url = await uploadImg(file);
+      const url = await uploadImage(file);
       setCoverUrl(url);
     } catch (err) { console.error(err); }
     setUploading(false);
