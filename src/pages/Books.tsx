@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useIpCheck } from "@/hooks/useIpCheck";
-import { fetchNovels, createNovel, deleteNovel, uploadImage } from "@/lib/booksApi";
-import { uploadImage as uploadImg } from "@/lib/forumApi";
+import { fetchNovels, createNovel, deleteNovel } from "@/lib/booksApi";
+import { uploadImage } from "@/lib/forumApi";
 
 const CATEGORIES = ["رواية", "مانجا", "مانهوا", "قصة قصيرة", "خيال علمي", "رعب", "رومانسية", "مغامرة"];
 
