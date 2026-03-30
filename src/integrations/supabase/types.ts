@@ -38,6 +38,44 @@ export type Database = {
         }
         Relationships: []
       }
+      chapters: {
+        Row: {
+          chapter_number: number
+          content: string
+          created_at: string
+          id: string
+          novel_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          chapter_number?: number
+          content?: string
+          created_at?: string
+          id?: string
+          novel_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          chapter_number?: number
+          content?: string
+          created_at?: string
+          id?: string
+          novel_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chapters_novel_id_fkey"
+            columns: ["novel_id"]
+            isOneToOne: false
+            referencedRelation: "novels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           author_name: string
@@ -69,6 +107,81 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      novel_comments: {
+        Row: {
+          author_name: string
+          chapter_id: string | null
+          content: string
+          created_at: string
+          id: string
+          novel_id: string
+        }
+        Insert: {
+          author_name: string
+          chapter_id?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          novel_id: string
+        }
+        Update: {
+          author_name?: string
+          chapter_id?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          novel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "novel_comments_chapter_id_fkey"
+            columns: ["chapter_id"]
+            isOneToOne: false
+            referencedRelation: "chapters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "novel_comments_novel_id_fkey"
+            columns: ["novel_id"]
+            isOneToOne: false
+            referencedRelation: "novels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      novels: {
+        Row: {
+          bio: string
+          category: string
+          cover_image_url: string
+          created_at: string
+          description: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          bio?: string
+          category?: string
+          cover_image_url?: string
+          created_at?: string
+          description?: string
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          bio?: string
+          category?: string
+          cover_image_url?: string
+          created_at?: string
+          description?: string
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       posts: {
         Row: {
