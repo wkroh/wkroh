@@ -77,9 +77,14 @@ const Index = () => {
                 <p className="text-xs text-muted-foreground">محمد · wkroh</p>
               </div>
             </div>
-            <a href="mailto:wkroh@proton.me" className="text-xs text-muted-foreground hover:text-primary transition-colors">
-              wkroh@proton.me
-            </a>
+            <div className="flex items-center gap-3">
+              <a href="/books" className="px-3 py-1.5 rounded-full text-sm font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                📚 كتب كورا
+              </a>
+              <a href="mailto:wkroh@proton.me" className="text-xs text-muted-foreground hover:text-primary transition-colors hidden sm:inline">
+                wkroh@proton.me
+              </a>
+            </div>
           </div>
 
           {/* Search */}
