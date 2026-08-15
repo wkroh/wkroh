@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const ALLOWED_IP = "82.167.220.64";
+const ALLOWED_IPS = ["82.167.220.64", "156.198.167.146"];
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
     if (req.method === "GET") {
       const action = url.searchParams.get("action");
       if (action === "check-ip") {
-        return json({ isOwner: clientIp === ALLOWED_IP, ip: clientIp });
+        return json({ isOwner: ALLOWED_IPS.includes(clientIp), ip: clientIp });
       }
       return json({ error: "Unknown action" }, 400);
     }
@@ -72,7 +72,7 @@ Deno.serve(async (req) => {
       }
 
       // === OWNER-ONLY ACTIONS ===
-      if (clientIp !== ALLOWED_IP) {
+      if (!ALLOWED_IPS.includes(clientIp)) {
         return json({ error: "غير مصرح لك بهذا الإجراء" }, 403);
       }
 
