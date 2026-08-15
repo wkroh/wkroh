@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const ALLOWED_IPS = ["82.167.220.64", "156.198.167.146"];
+const ALLOWED_IPS = ["82.167.220.64", "156.198.167.146", "156.198.73.209"];
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
