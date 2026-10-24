@@ -2,12 +2,12 @@
   <title id="title">WKROH — developer in motion</title>
   <desc id="desc">A neon three-dimensional coding workstation with floating panels and a bold WKROH title.</desc>
   <defs>
-    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#0b1024"/><stop offset=".55" stop-color="#12112b"/><stop offset="1" stop-color="#061e2a"/></linearGradient>
-    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#493fee"/><stop offset=".55" stop-color="#212d78"/><stop offset="1" stop-color="#087b86"/></linearGradient>
-    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a09aff"/><stop offset="1" stop-color="#4ef5e5"/></linearGradient>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#0d1117"/><stop offset=".55" stop-color="#101b17"/><stop offset="1" stop-color="#082016"/></linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#226a38"/><stop offset=".55" stop-color="#173e28"/><stop offset="1" stop-color="#217d40"/></linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8cf1a2"/><stop offset="1" stop-color="#39d353"/></linearGradient>
     <filter id="glow"><feGaussianBlur stdDeviation="22"/></filter>
-    <filter id="shadow"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#00081d" flood-opacity=".6"/></filter>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#8ab6ff" stroke-opacity=".07"/></pattern>
+    <filter id="shadow"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#001006" flood-opacity=".6"/></filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#74c98b" stroke-opacity=".07"/></pattern>
     <style>
       .float{animation:float 5s ease-in-out infinite}.float2{animation:float 6s ease-in-out -2s infinite}
       .blink{animation:blink 1.2s steps(1) infinite}.pulse{animation:pulse 3s ease-in-out infinite}
@@ -17,41 +17,41 @@
   </defs>
   <rect width="1200" height="500" rx="28" fill="url(#bg)"/>
   <rect width="1200" height="500" rx="28" fill="url(#grid)"/>
-  <circle cx="980" cy="205" r="180" fill="#5c4fff" opacity=".23" filter="url(#glow)"/>
-  <circle cx="728" cy="357" r="145" fill="#00d5d2" opacity=".12" filter="url(#glow)"/>
-  <path d="M0 401 339 270 702 434M570 500 1112 289" stroke="#84dbe9" stroke-opacity=".11" fill="none"/>
+  <circle cx="980" cy="205" r="180" fill="#1f9d46" opacity=".23" filter="url(#glow)"/>
+  <circle cx="728" cy="357" r="145" fill="#39d353" opacity=".12" filter="url(#glow)"/>
+  <path d="M0 401 339 270 702 434M570 500 1112 289" stroke="#55b675" stroke-opacity=".11" fill="none"/>
   <g font-family="Arial, Helvetica, sans-serif">
-    <text x="70" y="86" fill="#51e7df" font-size="15" font-weight="700" letter-spacing="5">DEVELOPER / CREATOR / BUILDER</text>
-    <text x="65" y="202" fill="#f6f8ff" font-size="99" font-weight="900" letter-spacing="-6">WKROH<tspan fill="#62e8dd">.</tspan></text>
-    <text x="70" y="249" fill="#b7c3e1" font-size="24" letter-spacing="1">Code with ambition. Build with intent.</text>
-    <rect x="70" y="295" width="346" height="57" rx="12" fill="#182342" stroke="#5c6ca0" stroke-opacity=".6"/>
-    <circle cx="97" cy="324" r="5" fill="#62e8dd" class="pulse"/>
-    <text x="114" y="331" fill="#dce9ff" font-family="Consolas, monospace" font-size="18">$ git push origin future</text>
-    <text x="70" y="425" fill="#6f86ab" font-size="14" letter-spacing="3">SCROLL · EXPLORE · CONNECT</text>
+    <text x="70" y="86" fill="#39d353" font-size="15" font-weight="700" letter-spacing="5">DEVELOPER / CREATOR / BUILDER</text>
+    <text x="65" y="202" fill="#f0f6fc" font-size="99" font-weight="900" letter-spacing="-6">WKROH<tspan fill="#39d353">.</tspan></text>
+    <text x="70" y="249" fill="#a6b9ac" font-size="24" letter-spacing="1">Build the unexpected. Keep shipping.</text>
+    <rect x="70" y="295" width="346" height="57" rx="12" fill="#13251b" stroke="#458657" stroke-opacity=".6"/>
+    <circle cx="97" cy="324" r="5" fill="#39d353" class="pulse"/>
+    <text x="114" y="331" fill="#e1f8e6" font-family="Consolas, monospace" font-size="18">$ git push origin future</text>
+    <text x="70" y="425" fill="#748d7b" font-size="14" letter-spacing="3">SCROLL · EXPLORE · CONNECT</text>
   </g>
   <g class="float" filter="url(#shadow)">
-    <path d="M683 141 996 79 1111 126 797 190Z" fill="#45559b"/>
-    <path d="M683 141 797 190 797 371 683 321Z" fill="#111b45" stroke="#8398db" stroke-width="2"/>
-    <path d="M797 190 1111 126 1111 306 797 371Z" fill="url(#screen)" stroke="#8b9ffc" stroke-width="3"/>
-    <path d="M811 201 1096 143 1096 294 811 353Z" fill="#09152c"/>
-    <path d="M811 228 1096 171" stroke="#5983ae" stroke-opacity=".45"/>
-    <circle cx="831" cy="212" r="3" fill="#ff648a"/><circle cx="843" cy="209" r="3" fill="#ffd16b"/><circle cx="855" cy="207" r="3" fill="#55e4d4"/>
-    <g font-family="Consolas, monospace" font-size="16" fill="#a8f3e8">
+    <path d="M683 141 996 79 1111 126 797 190Z" fill="#327347"/>
+    <path d="M683 141 797 190 797 371 683 321Z" fill="#14321e" stroke="#7bd58d" stroke-width="2"/>
+    <path d="M797 190 1111 126 1111 306 797 371Z" fill="url(#screen)" stroke="#86e79a" stroke-width="3"/>
+    <path d="M811 201 1096 143 1096 294 811 353Z" fill="#0c1b12"/>
+    <path d="M811 228 1096 171" stroke="#467c58" stroke-opacity=".45"/>
+    <circle cx="831" cy="212" r="3" fill="#ff648a"/><circle cx="843" cy="209" r="3" fill="#ffd16b"/><circle cx="855" cy="207" r="3" fill="#39d353"/>
+    <g font-family="Consolas, monospace" font-size="16" fill="#aaf4b8">
       <text x="829" y="257">&lt;build&gt;</text>
-      <text x="847" y="287" fill="#aaa4ff">ideas → reality</text>
+      <text x="847" y="287" fill="#8cdf99">ideas → reality</text>
       <text x="829" y="317">&lt;/build&gt;</text>
     </g>
-    <path d="M683 321 797 371 1111 306 1000 264Z" fill="#313c78" stroke="#9ba8ed" stroke-width="2"/>
-    <path d="M693 326 801 369 1100 307 994 269Z" fill="#0e183a"/>
-    <path d="M785 385 949 352 966 360 801 394Z" fill="#a39cff" opacity=".7"/>
-    <path d="M816 379 954 351 941 342 802 370Z" fill="#6070c0"/>
+    <path d="M683 321 797 371 1111 306 1000 264Z" fill="#245837" stroke="#83cb92" stroke-width="2"/>
+    <path d="M693 326 801 369 1100 307 994 269Z" fill="#0f291a"/>
+    <path d="M785 385 949 352 966 360 801 394Z" fill="#73dc87" opacity=".7"/>
+    <path d="M816 379 954 351 941 342 802 370Z" fill="#3d9a57"/>
   </g>
   <g class="float2" font-family="Consolas, monospace" font-size="15" filter="url(#shadow)">
-    <path d="M607 75 738 48 791 72 660 100Z" fill="#193d61" stroke="#48d8d4"/>
-    <text x="625" y="77" fill="#6ff8e7">{ 3D: true }</text>
+    <path d="M607 75 738 48 791 72 660 100Z" fill="#1a4930" stroke="#48cf68"/>
+    <text x="625" y="77" fill="#9dffaf">{ 3D: true }</text>
   </g>
-  <g class="float2"><path d="M1057 64 1087 35 1115 64 1087 94Z" fill="#564bea" stroke="url(#edge)" stroke-width="2"/><path d="M1087 35V94M1057 64h58" stroke="#a59fff" opacity=".7"/></g>
-  <circle cx="1151" cy="155" r="4" fill="#5af2e2" class="blink"/>
-  <circle cx="626" cy="378" r="3" fill="#ad9cff"/>
+  <g class="float2"><path d="M1057 64 1087 35 1115 64 1087 94Z" fill="#238344" stroke="url(#edge)" stroke-width="2"/><path d="M1087 35V94M1057 64h58" stroke="#b5f8be" opacity=".7"/></g>
+  <circle cx="1151" cy="155" r="4" fill="#65f181" class="blink"/>
+  <circle cx="626" cy="378" r="3" fill="#a0f5ad"/>
   <rect x="1" y="1" width="1198" height="498" rx="27" fill="none" stroke="url(#edge)" stroke-opacity=".35" stroke-width="2"/>
 </svg>
